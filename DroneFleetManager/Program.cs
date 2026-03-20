@@ -1,3 +1,6 @@
+using DispatchService;
+using DronemanagerService;
+using MothershipService;
 using PricingService;
 using Repositories;
 
@@ -14,6 +17,9 @@ builder.Services.AddSingleton<IDroneStorage, DroneStorage>();
 
 // services
 builder.Services.AddSingleton<IPricingManager, PricingManager>();
+builder.Services.AddSingleton<IDispatchManager, DispatchManager>();
+builder.Services.AddSingleton<IMothershipManager, MothershipManager>();
+builder.Services.AddSingleton<IDroneManager, DroneManager>();
 
 var app = builder.Build();
 
