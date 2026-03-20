@@ -1,3 +1,4 @@
+using DispatchService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Models.Dtos;
@@ -11,6 +12,7 @@ public class IndexModel : PageModel
     private readonly IDroneStorage _droneStorage;
     private readonly IPriceStorage _priceStorage;
     private readonly IPricingManager _pricingManager;
+    private readonly IDispatchManager _dispatchManager;
 
     public List<Drone> Drones { get; set; } = [];
     public List<EnergyPrice> Prices { get; set; } = [];
@@ -18,11 +20,13 @@ public class IndexModel : PageModel
     public IndexModel(
          IDroneStorage droneStorage,
          IPriceStorage priceStorage,
-         IPricingManager pricingManager)
+         IPricingManager pricingManager,
+         IDispatchManager dispatchManager)
     {
         _droneStorage = droneStorage;
         _priceStorage = priceStorage;
         _pricingManager = pricingManager;
+        _dispatchManager = dispatchManager;
     }
 
     public void OnGet()
@@ -42,5 +46,16 @@ public class IndexModel : PageModel
         _droneStorage.Reset();
         _priceStorage.Reset();
         return new JsonResult("ok");
+    }
+
+    public IActionResult OnGetEvaluatePrices()
+    {
+        _dispatchManager.EvaluatePrices();
+        return new JsonResult("ok");
+    }
+
+    public IActionResult OnGetFetchDrones()
+    {
+        return new JsonResult(_droneStorage.GetDrones());
     }
 }

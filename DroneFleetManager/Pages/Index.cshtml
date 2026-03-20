@@ -6,14 +6,17 @@
 <div>
     <h1 class="display-4">Welcome</h1>
     <button class="btn btn-primary"
-            onclick="toggleSection('drone-list')">
+            onclick="fetchDrones()">
         Show Drones
     </button>
-    <button class="btn btn-secondary ms-2"
+    <button class="btn btn-primary ms-2"
             onclick="fetchPrices()">
         Show Prices
     </button>
-    <button class="btn btn-danger ms-2" onclick="reset()">
+    <button class="btn btn-warning ms-2" onclick="evaluatePrices()">
+        Evaluate Prices
+    </button>
+    <button class="btn btn-secondary ms-2" onclick="reset()">
         Reset
     </button>
 </div>
@@ -47,6 +50,19 @@
         document.getElementById(id).classList.toggle('d-none');
     }
 
+    async function fetchDrones() {
+        document.getElementById('price-list').classList.add('d-none');
+        const response = await fetch('?handler=FetchDrones');
+        const drones = await response.json();
+        const list = document.getElementById('drone-list');
+        list.innerHTML = drones.map(d =>
+            `<li><strong>${d.id}</strong> — ${d.manufacturer} |
+            ${d.currentChargeKwh} / ${d.capacityKwh} kWh |
+            Status: ${d.status}</li>`
+        ).join('');
+        list.classList.remove('d-none');
+    }
+
     async function fetchPrices() {
         document.getElementById('drone-list').classList.add('d-none');
         const response = await fetch('?handler=FetchPrices');
@@ -58,6 +74,10 @@
             Min: ${p.minPrice} | Mid: ${p.midPrice} | Max: ${p.maxPrice}</li>`
         ).join('');
         list.classList.remove('d-none');
+    }
+
+    async function evaluatePrices() {
+        await fetch('?handler=EvaluatePrices');
     }
 
     async function reset() {

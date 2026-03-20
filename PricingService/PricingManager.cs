@@ -26,9 +26,9 @@ public class PricingManager : IPricingManager
         {
             IntervalStart = now,
             IntervalEnd = now.AddMinutes(1),
-            MinPrice = Math.Round((decimal)(_random.NextDouble() * 200 - 50), 2),
-            MidPrice = Math.Round((decimal)(_random.NextDouble() * 300 + 100), 2),
-            MaxPrice = Math.Round((decimal)(_random.NextDouble() * 1500 + 300), 2),
+            MinPrice = Math.Round((decimal)(_random.NextDouble() * 100 - 50), 2),
+            MidPrice = Math.Round((decimal)(_random.NextDouble() * 200), 2),
+            MaxPrice = Math.Round((decimal)(_random.NextDouble() * 200 + 100), 2),
             Source = "TenneT"
         };
 

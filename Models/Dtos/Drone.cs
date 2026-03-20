@@ -1,8 +1,10 @@
 ﻿namespace Models.Dtos;
 
-public enum DroneStatus { Online, Offline, Charging, Discharging, Standby, Fault }
+public enum DroneStatus { Charging, Discharging, Standby, Faulty }
 
-public enum DroneCommand { Charge, Discharge, Standby }
+public enum DroneInstruction { Charge, Discharge, Standby }
+
+public enum DroneHeartbeat { Full, Empty, Error }
 
 public class Drone
 {
