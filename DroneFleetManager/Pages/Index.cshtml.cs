@@ -1,20 +1,28 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Models.Dtos;
+using Repositories;
 
-namespace DroneFleetManager.Pages
+namespace DroneFleetManager.Pages;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly IDroneStorage _droneStorage;
+    private readonly IPriceStorage _priceStorage;
+
+    public List<Drone> Drones { get; set; } = [];
+    public List<EnergyPrice> Prices { get; set; } = [];
+
+    public IndexModel(
+         IDroneStorage droneStorage,
+         IPriceStorage priceStorage)
     {
-        private readonly ILogger<IndexModel> _logger;
+        _droneStorage = droneStorage;
+        _priceStorage = priceStorage;
+    }
 
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
-
-        }
+    public void OnGet()
+    {
+        Drones = _droneStorage.GetDrones();
+        Prices = _priceStorage.GetPrices();
     }
 }
