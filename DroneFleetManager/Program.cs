@@ -1,3 +1,4 @@
+using PricingService;
 using Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +12,8 @@ builder.Services.AddSingleton(droneDb);
 builder.Services.AddSingleton<IPriceStorage, PriceStorage>();
 builder.Services.AddSingleton<IDroneStorage, DroneStorage>();
 
-
-
-
+// services
+builder.Services.AddSingleton<IPricingManager, PricingManager>();
 
 var app = builder.Build();
 

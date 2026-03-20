@@ -3,8 +3,57 @@
 @{
     ViewData["Title"] = "Home page";
 }
-
-<div class="text-center">
+<div>
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <button class="btn btn-primary"
+            onclick="toggleSection('drone-list')">
+        Show Drones
+    </button>
+    <button class="btn btn-secondary ms-2"
+            onclick="fetchPrices()">
+        Show Prices
+    </button>
 </div>
+
+<ul id="drone-list" class="d-none mt-3">
+    @foreach (var drone in Model.Drones)
+    {
+        <li>
+            <strong>@drone.Id</strong> — @drone.Manufacturer |
+            @drone.CurrentChargeKwh / @drone.CapacityKwh kWh |
+            Status: @drone.Status
+        </li>
+    }
+</ul>
+
+<ul id="price-list" class="d-none mt-3">
+    @foreach (var price in Model.Prices)
+    {
+        <li>
+            <strong>@price.IntervalStart.ToString("HH:mm:ss")</strong> →
+            @price.IntervalEnd.ToString("HH:mm:ss") |
+            Min: @price.MinPrice | Mid: @price.MidPrice | Max: @price.MaxPrice
+        </li>
+    }
+</ul>
+
+<script>
+    function toggleSection(id) {
+        document.querySelectorAll('#drone-list, #price-list')
+                .forEach(el => el.classList.add('d-none'));
+        document.getElementById(id).classList.toggle('d-none');
+    }
+
+    async function fetchPrices() {
+        document.getElementById('drone-list').classList.add('d-none');
+        const response = await fetch('?handler=FetchPrices');
+        const prices = await response.json();
+        const list = document.getElementById('price-list');
+        list.innerHTML = prices.map(p =>
+            `<li><strong>${p.intervalStart.substring(11, 19)}</strong> →
+            ${p.intervalEnd.substring(11, 19)} |
+            Min: ${p.minPrice} | Mid: ${p.midPrice} | Max: ${p.maxPrice}</li>`
+        ).join('');
+        list.classList.remove('d-none');
+    }
+</script>
