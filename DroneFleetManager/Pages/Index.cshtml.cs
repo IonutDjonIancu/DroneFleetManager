@@ -1,20 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Models.Dtos;
+using PricingService;
+using Repositories;
 
-namespace DroneFleetManager.Pages
+namespace DroneFleetManager.Pages;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly IDroneStorage _droneStorage;
+    private readonly IPriceStorage _priceStorage;
+    private readonly IPricingManager _pricingManager;
+
+    public List<Drone> Drones { get; set; } = [];
+    public List<EnergyPrice> Prices { get; set; } = [];
+
+    public IndexModel(
+         IDroneStorage droneStorage,
+         IPriceStorage priceStorage,
+         IPricingManager pricingManager)
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
-
-        }
+        _droneStorage = droneStorage;
+        _priceStorage = priceStorage;
+        _pricingManager = pricingManager;
     }
+
+    public void OnGet()
+    {
+        Drones = _droneStorage.GetDrones();
+        Prices = _priceStorage.GetPrices();
+    }
+
+    public IActionResult OnGetFetchPrices()
+    {
+        _pricingManager.FetchAndStorePrice();
+        return new JsonResult(_priceStorage.GetPrices());
+    }
+
 }
