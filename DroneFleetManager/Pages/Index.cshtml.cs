@@ -37,4 +37,10 @@ public class IndexModel : PageModel
         return new JsonResult(_priceStorage.GetPrices());
     }
 
+    public IActionResult OnGetReset()
+    {
+        _droneStorage.Reset();
+        _priceStorage.Reset();
+        return new JsonResult("ok");
+    }
 }

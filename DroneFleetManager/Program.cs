@@ -15,6 +15,8 @@ builder.Services.AddSingleton<IDroneStorage, DroneStorage>();
 // services
 builder.Services.AddSingleton<IPricingManager, PricingManager>();
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

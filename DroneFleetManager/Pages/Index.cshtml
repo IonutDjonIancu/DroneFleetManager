@@ -13,6 +13,9 @@
             onclick="fetchPrices()">
         Show Prices
     </button>
+    <button class="btn btn-danger ms-2" onclick="reset()">
+        Reset
+    </button>
 </div>
 
 <ul id="drone-list" class="d-none mt-3">
@@ -55,5 +58,10 @@
             Min: ${p.minPrice} | Mid: ${p.midPrice} | Max: ${p.maxPrice}</li>`
         ).join('');
         list.classList.remove('d-none');
+    }
+
+    async function reset() {
+        await fetch('?handler=Reset');
+        location.reload();
     }
 </script>
